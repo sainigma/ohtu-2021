@@ -25,15 +25,21 @@ class Statistics:
         return list(players_of_team)
 
     def top_scorers(self, how_many):
+        if how_many < 1:
+            return []
+
         sorted_players = sorted(
             self._players,
             reverse=True,
             key=sort_by_points
         )
 
+        if len(sorted_players) < how_many:
+            how_many = len(sorted_players)
+
         result = []
         i = 0
-        while i <= how_many:
+        while i < how_many:
             result.append(sorted_players[i])
             i += 1
 
