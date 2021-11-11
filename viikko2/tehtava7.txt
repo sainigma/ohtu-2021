@@ -1,0 +1,21 @@
+*   d0fa14c Merge branch 'master' into bugikorjaus
+|\  
+| * 611ccde hienompi output
+| *   5e493c2 Merge branch 'bugikorjaus'
+| |\  
+| * | 547d0fb tarkennettiin loggerin viestejä
+* | | 082ea02 hienompi output
+| |/  
+|/|   
+* | de7286a goodbye
+|/  
+* 79f809d kommentti
+* 62b7061 LICENSE
+* 5d16cf5 viimeistely
+*   265e2dd Merge branch 'laskut'
+|\  
+| * 88e1555 erotus.py
+| * 07e0b1a summa.py
+* | 4191a60 logger.py
+|/  
+* 083c981 initial commit
