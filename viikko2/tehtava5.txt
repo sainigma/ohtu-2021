@@ -1,0 +1,8 @@
+* 5d16cf5 viimeistely
+*   265e2dd Merge branch 'laskut'
+|\  
+| * 88e1555 erotus.py
+| * 07e0b1a summa.py
+* | 4191a60 logger.py
+|/  
+* 083c981 initial commit
