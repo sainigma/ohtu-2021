@@ -7,4 +7,12 @@ class Player:
         self.assists = data['assists']
     
     def __str__(self):
-        return f"{self.name} team {self.team}  goals {self.goals} assists {self.assists}"
+        goals = str(self.goals)
+        assists = str(self.assists)
+        total = str(self.goals + self.assists)
+        return f"{self.name:20} {self.team} {goals:2} + {assists:2} = {total:2}"
+
+    def __lt__(self, other):
+        if other.goals + other.assists > self.goals + self.assists:
+            return True
+        return False
