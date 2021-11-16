@@ -1,5 +1,6 @@
 *** Settings ***
 Resource  resource.robot
+Resource  login_resource.robot
 Suite Setup  Open And Configure Browser
 Suite Teardown  Close Browser
 Test Setup  Reset Application And Go To Register Page
@@ -8,31 +9,50 @@ Test Setup  Reset Application And Go To Register Page
 
 Register With Valid Username And Password
     Set Username  kalle
-    Set Password  kalle123
-    Set PasswordConfirmation  kalle123
+    Set Register Password  kalle123  kalle123
     Submit Credentials
     Register Should Succeed
 
 Register With Too Short Username And Valid Password
     Set Username  k
-    Set Password  kalle123
-    Set PasswordConfirmation  kalle123
+    Set Register Password  kalle123  kalle123
     Submit Credentials
     Register Should Fail With Message  Username too short
 
 Register With Valid Username And Too Short Password
     Set Username  kalle
-    Set Password  kal123
-    Set PasswordConfirmation  kal123
+    Set Register Password  kal123  kal123
     Submit Credentials
     Register Should Fail With Message  Invalid password
 
 Register With Nonmatching Password And Password Confirmation
     Set Username  kalle
-    Set Password  kalle123
-    Set PasswordConfirmation  123kalle
+    Set Register Password  kalle123  123kalle
     Submit Credentials
     Register Should Fail With Message  Passwords do not match
+
+Login After Successful Registration
+    Set Username  kalle
+    Set Register Password  kalle123  kalle123
+    Submit Credentials
+    Register Should Succeed
+    
+    Go To Login Page
+    Set Username  kalle
+    Set Password  kalle123
+    Submit Login Credentials
+    Login Should Succeed
+
+Login After Failed Registration
+    Set Username  k
+    Set Register Password  kle123  123kal
+    Submit Credentials
+
+    Go To Login Page
+    Set Username  k
+    Set Password  kle123
+    Submit Login Credentials
+    Login Should Fail With Message  Invalid username or password
 
 *** Keywords ***
 
@@ -51,14 +71,7 @@ Register Should Fail With Message
 Submit Credentials
     Click Button  Register
 
-Set Username
-    [Arguments]  ${username}
-    Input Text  username  ${username}
-
-Set Password
-    [Arguments]  ${password}
+Set Register Password
+    [Arguments]  ${password}  ${confirmation}
     Input Password  password  ${password}
-
-Set PasswordConfirmation
-    [Arguments]  ${password}
-    Input Password  password_confirmation  ${password}
+    Input Password  password_confirmation  ${confirmation}
