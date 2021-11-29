@@ -14,7 +14,8 @@ class Ostoskori:
         return len(self.kori)
 
     def hinta(self):
-        return 0
+        summa = sum(map(lambda x: x.hinta(), self.kori))
+        return summa
         # kertoo korissa olevien ostosten yhteenlasketun hinnan
 
     def lisaa_tuote(self, lisattava: Tuote):
