@@ -27,13 +27,13 @@ class TestKauppa(unittest.TestCase):
     def setUp(self):
         self.pankki_mock = Mock()
         varasto_mock = Mock()
-        Viitegeneraattori_mock = Mock()
-        Viitegeneraattori_mock.uusi.return_value = 42
+        self.viitegeneraattori_mock = Mock()
+        self.viitegeneraattori_mock.uusi.return_value = 42
         
         varasto_mock.saldo.side_effect = self.varasto_saldo
         varasto_mock.hae_tuote.side_effect = self.varasto_hae_tuote
 
-        self.kauppa = Kauppa(varasto_mock, self.pankki_mock, Viitegeneraattori_mock)
+        self.kauppa = Kauppa(varasto_mock, self.pankki_mock, self.viitegeneraattori_mock)
 
     def test_ostoksen_paaytyttya_pankin_metodia_tilisiirto_kutsutaan(self):
         # tehdään ostokset
@@ -66,4 +66,28 @@ class TestKauppa(unittest.TestCase):
         self.kauppa.lisaa_koriin(3)
         self.kauppa.tilimaksu("pekka", "12345")
 
+        self.pankki_mock.tilisiirto.assert_called_with("pekka",42,"12345", self.kauppa._kaupan_tili, 5)
+
+    def test_asioinnin_aloittaminen_nollaa_ostoskorin(self):
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(2)
+
+        self.kauppa.tilimaksu("pekka", "12345")
+        self.pankki_mock.tilisiirto.assert_called_with("pekka",42,"12345", self.kauppa._kaupan_tili, 15)
+
+    def test_jokaiselle_ostokselle_pyydetaan_viitenumero(self):
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.tilimaksu("pekka", "12345")
+        self.kauppa.tilimaksu("pekka", "12345")
+        self.assertEqual(self.viitegeneraattori_mock.uusi.call_count, 2)
+
+    def test_ostoskorista_poistaminen_toimii(self):
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.lisaa_koriin(2)
+        self.kauppa.poista_korista(2)
+        self.kauppa.tilimaksu("pekka", "12345")
         self.pankki_mock.tilisiirto.assert_called_with("pekka",42,"12345", self.kauppa._kaupan_tili, 5)
