@@ -64,3 +64,12 @@ class TestOstoskori(unittest.TestCase):
         ostokset_nimet = map(lambda x: x.tuotteen_nimi(), ostokset)
         self.assertTrue("Maito" in ostokset_nimet)
         self.assertTrue("Mehu" in ostokset_nimet)
+
+    def test_kahden_saman_tuotteen_lisaamisen_jalkeen_jos_toinen_poistetaan_koriin_jaa_ostos_jossa_on_yksi_tuote(self):
+        maito = Tuote("Maito",3)
+        self.kori.lisaa_tuote(maito)
+        self.kori.lisaa_tuote(maito)
+        self.kori.poista_tuote(maito)
+
+        ostos = self.kori.ostokset()[0]
+        self.assertEqual(ostos.lukumaara(), 1)
