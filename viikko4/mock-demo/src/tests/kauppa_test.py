@@ -121,5 +121,5 @@ class TestKauppa(unittest.TestCase):
         kauppa.lisaa_ostos(1)
         kauppa.maksa("4321")
 
-        # ...ja kolmas viite
-        pankki_mock.maksa.assert_called_with(ANY, ANY, 3)
+        # ...ja kolmas viite, rikottu
+        pankki_mock.maksa.assert_called_with(ANY, ANY, 1000)
