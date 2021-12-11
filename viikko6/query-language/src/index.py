@@ -8,8 +8,21 @@ def main():
     stats = Statistics(reader)
 
     query = QueryBuilder()
-    matcher = query.playsIn('NYR').hasAtLeast(5, 'goals').hasFewerThan(10, 'goals').build()
+    matcher1 = (
+        query.playsIn('PHI')
+        .hasAtLeast(10, 'assists')
+        .hasFewerThan(5, 'goals')
+        .build()
+        )
     
+    matcher2 = (
+        query.playsIn('EDM')
+        .hasAtLeast(40, 'points')
+        .build()
+    )
+    
+    matcher = query.oneOf(matcher1, matcher2).build()
+
     '''
     matcher1 = And(
         HasAtLeast(5, "goals"),
