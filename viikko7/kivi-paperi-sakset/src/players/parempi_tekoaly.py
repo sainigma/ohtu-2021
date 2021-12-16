@@ -1,6 +1,8 @@
-# "Muistava tekoäly"
-class TekoalyParannettu:
-    def __init__(self, muistin_koko):
+from players.tekoaly import Tekoaly
+
+class ParempiTekoaly(Tekoaly):
+    def __init__(self, muistin_koko = 10):
+        super().__init__()
         self._muisti = [None] * muistin_koko
         self._vapaa_muisti_indeksi = 0
 
@@ -15,9 +17,9 @@ class TekoalyParannettu:
         self._muisti[self._vapaa_muisti_indeksi] = siirto
         self._vapaa_muisti_indeksi = self._vapaa_muisti_indeksi + 1
 
-    def anna_siirto(self):
+    def hae_siirto(self, prompt):
         if self._vapaa_muisti_indeksi == 0 or self._vapaa_muisti_indeksi == 1:
-            return "k"
+            return self._tulosta_siirto('k')
 
         viimeisin_siirto = self._muisti[self._vapaa_muisti_indeksi - 1]
 
@@ -41,11 +43,14 @@ class TekoalyParannettu:
         # - jos papereita eniten, annetaan aina sakset
         # muulloin annetaan aina kivi
         if k > p or k > s:
-            return "p"
+            valinta = "p"
         elif p > k or p > s:
-            return "s"
+            valinta = "s"
         else:
-            return "k"
+            valinta = "k"
 
         # Tehokkaampiakin tapoja löytyy, mutta niistä lisää
         # Johdatus Tekoälyyn kurssilla!
+
+        self._tulosta_siirto(valinta)
+        return valinta
